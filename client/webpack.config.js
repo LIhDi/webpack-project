@@ -1,4 +1,13 @@
 const path = require('path');
+const babiliPlugin = require('babili-webpack-plugin');
+
+let plugins= [];
+// Process é uma variavel acessada por qualquer modulo do nodeJs que me da acesso ao processo do node.
+// E esse processo me da acesso a variavel env que me permite acessar as variaveis de ambiente.
+
+if(process.env.NODE_ENV == 'production') {
+    plugins.push(new babiliPlugin());
+}
 
 module.exports = {
     entry: './app-src/app.js',
@@ -20,5 +29,6 @@ module.exports = {
                 }
             }
         ]
-    }
+    },
+    plugins
 }

@@ -1,0 +1,31 @@
+    O próximo passo será criar nosso build de produção, que consiste em minificar o bundle.js final.
+    Felizmente, o Webpack já suporta esse processo automaticamente se passarmos o parâmetro adequado.
+
+    No package.json, adicionamos:
+- "build-prod": "webpack -p --config webpack.config.js"
+
+    Observe que inserimos o parâmetro de -p e internamente ele vai usar o uglify,
+que não precisaremos baixar por ser uma dependência do Webpack.
+    O Uglify é um módulo famoso, bastante utilizado para minificar arquivos JavaScript.
+    O Uglify não suporta a sintaxe do ES2015, assim como as versões seguintes.
+    O nosso projeto foi descrito em ES2017, ele certamente não será suportado.
+    Com o Uglify, não conseguiremos minificar os arquivos escritos com o ES mais modernos.
+
+
+    Nós pediremos para o webpack usar outro módulo na realização desse processo de minificação e suporte a sintaxe do ES2015.
+    Usaremos o Babili, faremos a instalação no Terminal, com o seguinte comando:
+
+- npm install babili-webpack-plugin@0.1.1 --save-dev
+
+    A diferença entre loader e plugin no webpack , é que o loader trabalha em cada arquivo separado antes do bundle final ser criado,
+e o plugin trabalha nesse bundle final já criado.
+
+    O próximo passo será configurar o babili no webpack.config.js, porém, o plugin só será ativado quando estivermos em produção.
+    Em desenvolvimento, ele não poderá ser ativado, porque não podemos gastar tempo com processo de minificação.
+    Resolveremos isso criando uma variável de ambiente, por exemplo, node_env - lembrando que o webpack é processado pelo NodeJS.
+    Ele possui o valor production, caso contrário não é possível usar o plugin.
+    No package.json, nós removemos -p a da linha em que temos build-prod, agora, incluiremo NODE_ENV=production.
+
+- "NODE_ENV=production webpack --config webpack.config.js"
+
+

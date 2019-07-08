@@ -1,0 +1,8 @@
+    Para garantirmos que a mudança da variável de ambiente funcionará em qualquer plataforma, pediremos a ajuda de um módulo do NodeJS.
+    Precisamos instalar o cross-env:
+- npm install cross-env@5.0.1 --save-dev
+
+O módulo cross-env nos permite setar as variáveis de ambiente cross platform.
+Após a instalação, encontraremos o cross-env, abaixo do babili-webpack-plugin no package.json.
+
+- cross-env NODE_ENV=production webpack --config webpack.config.js
