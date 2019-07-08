@@ -1,0 +1,23 @@
+    Temos que fazer que o weback solicite ao babel-core que transcompile,
+que processe os arquivos antes do webpack crie o bundle.
+    A ponte entre o babel e o webpack é feito atraves de um loader,
+no caso o babel-loader.
+
+- npm install babel-loader@7.1.0 --save-dev
+
+    Isso ainda não é suficiente, precisamos fazer com que client/webpack.config.js utilize o loader que acabamos de baixar.
+    Fazemos isso adicionando a configuração module.
+    Dentro de module, podemos ter várias rules (regras), e cada regra pode usar um módulo específico quando aplicada.
+
+    Por enquanto, temos apenas uma regra. A propriedade test indica a condição na qual nosso loader será aplicado.
+    Usamos a expressão regular /\.js$/ para considerar todos os arquivos que terminam com a extensão .js.
+    Durante este processo, excluímos a pasta node_modules,
+pois não faz sentido processar os arquivos dela.
+    Por fim, dentro de use, indicamos o loader que será utilizado, em nosso caso o babel-loader.
+
+    Dentro da pasta client/dist, foi gerado o arquivo bundle.js. É um arquivo que contém todos os módulos usados pela aplicação concatenados.
+    Mesmo ainda sem um servidor rodando, se abrirmos client/index.html diretamente no navegador, nossa aplicação continuará funcionando.
+    Temos agora que minificar scripts em ambiente de produção é uma boa prática.
+    Aliás, ainda não temos uma separação clara entre esses dois ambientes.
+
+    Assim vimos que precisa utilizar um loader para poder lidar com arquivos que não conseguem ser processados diretamente pelo webpack.

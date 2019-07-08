@@ -1,0 +1,36 @@
+    Faremos a primeira configuração do Webpack, na qual indicaremos qual módulo será carregado primeiramente pela aplicação.
+    Desta forma, o Webpack conseguirá ver todas as dependências do módulo e assim, ele construirá o bundle,
+que é o arquivo final com todos os módulos da aplicação. No caso, o módulo que será carregado primeiramente é o app.js.
+
+    Frameworks como AngularJS, React ou VueJs possuem um módulo de aplicação que será carregado antes dos demais.
+    Depois, com a ajuda do Webpack, serão desenvolvidas as dependências do módulo.
+
+    Se estamos criando um módulo no NodeJS, devemos adicionar a seguinte linha de código dentro webpack.config.js:
+
+module.exports = {
+    // Qual o ponto de entrada da minha aplicação
+    entry: './app-src/app.js',
+    output: {
+        filename: 'bundle.js',
+        // O __dirname vai dizer qual o diretorio desse modulo e com ele vou concatenar a pasta dist
+        path: path.resolve(__dirname, 'dist')
+    }
+}
+
+    Configuramos o módulo, onde passamos o entry - o ponto de entrada -
+e especificamos qual será o primeiro módulo carregado.
+    Definiremos ainda onde será gravado o bundle do final, que será resolvido no módulo inicial.
+    Lembrando que o Webpack vai procurar todas as dependências e resolverá isso por nós,
+gerando um grande arquivo no fim. Isso será feito em output, que receberá o objeto filename: 'bundle.js'.
+
+    No path do output, definiremos que ele é o resultado de path.resolve.
+    Ele receberá a variável do NodeJS, chamada __dirname, que informa qual a diretório do webpack.config.
+    Em seguida, queremos concatenar a pasta dist, adicionada como segundo parâmetro do resolve().
+    Então o path.resolve() criará o caminho completo até a pasta dist, com base na pasta client.
+
+    Se analisarmos o index.html, em que especificamos que o carregamento deve ser feito desde dist/bundle.js,
+com isso o bundle.js será criado dentro da pasta dist - localizada dentro de client,
+conforme especificamos no webpack.config.js.
+
+    Se chamarmos o script build-dev do package.json,
+será executado o binário do webpack passando como configuração o arquivo webpack.config.js.

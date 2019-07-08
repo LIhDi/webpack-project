@@ -1,0 +1,20 @@
+    Para introduzirmos o Webpack, começaremos a preparar a nossa estrutura.
+    Vamos abrir o projeto e apagar a pasta app, que é o resultado da compilação de app-src,
+e onde ficam armazenados os arquivos originais do projeto.
+    Assim a geração dos arquivos compilados pelo Babel será feita com o auxílio do Webpack.
+    Em seguida, removeremos o systemjs e o babel-cli - a ferramenta de linha de comando que permite trabalharmos com o Babel.
+    Nós não trabalharemos com essa ferramenta. Quem vai ser responsável por chamar o Babel e compilar o código, será o Webpack.
+
+- npm uninstall babel-cli --save-dev
+- npm uninstall systemjs --save
+
+    Após as duas remoções, o próximo passo será instalar o Webpack, instalaremos também babel-core.
+- npm install webpack@3.1.0 babel-core@6.25.0 --save-dev
+
+    Nós desinstalamos o babel-cli e instalamos este outro porque o Babel ainda será usado para a compilação dos arquivos.
+    Nós vamos instalamos o core do Babel, que será chamado pelo Webpack para automatizar o processo.
+    No Terminal, digitamos o --save-dev, por se tratar de uma dependêcia de desenvolvimento.
+    Usaríamos apenas --save por ser uma dependência em tempo de produção.
+
+    Temos o projeto, que não possui carregador de módulo, ou seja, sem o systemjs.
+    Também não temos arquivos compilados, é o momento de configurar o Webpack para construir e empacotar os módulos da aplicação.

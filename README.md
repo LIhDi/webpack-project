@@ -12,6 +12,7 @@ npm install
 ## Configuração para Desenvolvimento
 
 Para rodar o projeto:
+Entrar na pasta client/ e rodar o comando:
 
 ```sh
 npm run build-dev
