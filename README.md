@@ -19,6 +19,16 @@ Para rodar o projeto:
 npm run build-dev
 ```
 
+## Configuração para Produção
+
+Para rodar o projeto:
+
+- Entrar na pasta client/ e rodar o comando:
+
+```sh
+npm run build-prod
+```
+
 
 ## Contributing
 
