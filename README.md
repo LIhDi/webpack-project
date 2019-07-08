@@ -16,7 +16,7 @@ Para rodar o projeto:
 - Entrar na pasta client/ e rodar o comando:
 
 ```sh
-npm run build-dev
+npm start
 ```
 
 ## Configuração para Produção

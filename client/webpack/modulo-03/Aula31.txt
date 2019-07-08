@@ -1,0 +1,21 @@
+    Para trabalharmos em ambiente de desenvolvimento, quero usar um servidor que se integre com o Webpack, desta forma,
+não precisaremos criar um servidor próprio para tornar acessível nosso projeto.
+
+    No caso, usaremos o Webpack dev server, utilizado por diversos frameworks, single pages applications.
+    Primeiramente, adequaremos o projeto para trabalhados com Webpack dev server.
+
+    - 1 Dentro de server, o arquivo wxpress.js vamos comentrar o trecho de codigo.
+
+/*
+app.set('clientPath', path.join(__dirname, '../..', 'client'));
+console.log(app.get('clientPath'));
+app.use(express.static(app.get('clientPath')));
+*/
+
+    - 2 Como nossa aplicação é uma single page application, trata-se de um protótipo feito em JavaScript,
+vai rodar no Weppack server e a API está em outro server, adequaremos os endereços das requisições feitas pela aplicação.
+
+    Seguiremos o seguinte caminho: "client > domain > NegociacaoService.js".
+    Em seguida, em todos os endereços da API, adicionaremos http://localhost:3000/, por exemplo, dentro do ObtemNegociacoesDaSemana():
+
+- 'http://localhost:3000/'

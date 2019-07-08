@@ -1,0 +1,35 @@
+    Vamos instalar o webpach server:
+- npm install webpack-dev-server@2.5.1 --save-dev
+
+    Após a instalação ser finalizada, quando analisarmos o arquivo package.json, encontraremos o webpack-dev-server listado.
+
+    Agora vamos adicionar um novo npm script, chamdo start que ele irá chamar diretamente o binario do webpack-dev-server.
+
+    O responsável por fazer o build do projeto será webpack-dev-server, que chamará o webpack.config.js.
+    Devemos apagar a pasta dist, que contém o bundle.js.
+    Como ainda não configuramos o ambiente de produção, estamos fazendo um build de desenvolvimento.
+
+    Porém, uma diferença será que não acessaremos mais a aplicação pelo http://localhost:3000, no caso, vamos utilizar http://localhost:8080.
+    No navegador, digitaremos esse endereço, e o arquivo será compartilhado pelo webpack-dev-server.
+    Porém, se clicarmos no botão "Importar Negociações", a tabela com os dados não será exibida.
+
+    Primeiro verificamos que não foi criada a pasta dist/ com o bundle.js
+    O webpack-dev-server cria o bundle em memoria, o problema e que ele criou em memoria mas direto na raiz em vez de ser na pasta dist/
+
+- localhost:8080/dist/bundle.js
+
+    Para fazermos isso alteramos o webpack.config.js
+- publicPath: 'dist'
+
+Ao realizarmos a gravação, automaticamente o webpack-dev-server irá compilá-lo e gerar um novo bundle.
+No navegador, será desnecessário inclusive recarregar a página.
+Se preenchermos os campos do formulário, ao clicarmos no botão "Incluir".
+
+Esta geração automática do novo bundle é bastante interessante em ambiente de desenvolvimento, por isso, estamos utilizando o webpack-dev-server.
+
+
+
+
+
+
+
