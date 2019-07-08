@@ -1,0 +1,10 @@
+    No nosso projeto, a pasta css tem arquivos do bootstrap que são importados no index.html.
+    Esses arquivos forma baixados manualmente do site do Bootstrap. Nós baixamos e descompactamos os arquivos que foram descompactados e movidos para a pasta css. Poderíamos ter adicionado um CDN (Contend Delivery Network) e torcer para não ser barrado pelo firewall.
+
+    Se o nosso ambiente de desenvolvimento usar o NodeJS, podemos usar o npm,
+para gerenciar os pacotes Front-End (como Bootstrap e Angular).
+    Vamos configurar o Webpack para que ele entenda a importação de módulos baixados do Node, armazenados na pasta node_modules.
+
+    - 1 Dentro de css/ iremos apagar todos os arquivos.
+    - 2 Em index.html vamos apagar as importações.
+    - 3 Vamos usar o npm para gerenciar os pacotes do front-end
