@@ -2,6 +2,7 @@ const path = require('path');
 const babiliPlugin = require('babili-webpack-plugin');
 const extractTextPlugin = require('extract-text-webpack-plugin');
 const optimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const webpack = require('webpack');
 
 let plugins= [];
 // Process é uma variavel acessada por qualquer modulo do nodeJs que me da acesso ao processo do node.
@@ -10,6 +11,14 @@ let plugins= [];
 // Vamos usar tanto em produção como em desenvolvimento
 plugins.push(
     new extractTextPlugin("styles.css"))
+
+plugins.push(
+    new webpack.ProvidePlugin({
+            // O $ diz que vai estar disponivel para todos os modulos e passa o caminho e outro com o nome JQuery e passa o caminho
+           '$': 'jquery/dist/jquery.js',
+           'jQuery': 'jquery/dist/jquery.js'
+    })
+)
 
 // Vamos minificar os arquivos apenas em prod
 if (process.env.NODE_ENV == 'production') {

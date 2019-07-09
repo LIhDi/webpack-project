@@ -17,6 +17,22 @@ import 'bootstrap/js/modal.js';
     Por algum motivo quando o modal é carregado o jQuery ainda não foi carregado, ele não está acessivel pelo bootstrap,
 assim ele precisa estar no escopo global.
 
-    3
 
+    Como faremos para disponibilizar o jquery de uma maneira que seja acessível por todos os módulos gerados no bundle.js.
 
+    A solução será utilizar um plugin que já está embutido no Webpack: webpack.ProvidePlugin.
+    Para isto, iremos importar o objeto que representa o webpack no webpack.config
+
+- const webpack = require('webpack');
+
+    A forma como disponibilizaremos o jQuery deve estar disponpivel tanto para ambiente de desenvolvimento como de produção, por isso,
+adicionaremos abaixo do extractTextPlugin, push() com webpack.ProvidePlugin.
+
+plugins.push(
+    new webpack.ProvidePlugin({
+            // O $ diz que vai estar disponivel para todos os modulos e passa o caminho e outro com o nome JQuery e passa o caminho
+           '$': 'jquery/dist/jquery.js',
+           'jQuery': 'jquery/dist/jquery.js'
+    })
+
+E retiramos o import de app.js
