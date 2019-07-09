@@ -11,17 +11,14 @@ npm install
 
 ## Configuração para Desenvolvimento
 
-Para rodar o projeto:
 
 - Entrar na pasta client/ e rodar o comando:
 
 ```sh
-npm start
+npm run build-dev
 ```
 
 ## Configuração para Produção
-
-Para rodar o projeto:
 
 - Entrar na pasta client/ e rodar o comando:
 
@@ -29,6 +26,11 @@ Para rodar o projeto:
 npm run build-prod
 ```
 
+## Para rodar local o projeto:
+
+```sh
+npm start
+```
 
 ## Contributing
 

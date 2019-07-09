@@ -1,0 +1,28 @@
+    O nosso css não está mificado pois quando utilizamos o plugins para extrair o extractTextPlugin,
+e extrair e colocar todos num arquivo <style> separado e usufruir da tag <link> no navegador,
+totalmente otimizada para essa finalidade. Nesse processo, o CSS acabou não sendo minificado.
+
+    Nós resolveremos isso utilizando dois plugins, o primeiro deles será optimize-css-assets-webpack-plugin.
+    Ele receberá a responsabilidade por processar o style.css gerado antes de ser gravado na pasta de build.
+    Porém, ele nao sabe processar o CSS, ainda será preciso ter um minificador CSS, no caso, usaremos o cssnano.
+- npm install optimize-css-assets-webpack-plugin@2.0.0 --save-dev
+- npm install cssnano@3.10.0 --save-dev
+
+    Agora vamos configurar o webpack.config
+- const optimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+    Não vamos importar cssnano, você deve apenas entender que o optmize-css-assets-webpack-plugin,
+só pode ser adicionado ao Webpack quando for ambiente de produção.
+    Em ambiente de desenvolvimento, não queremos que o arquivo seja minificado.
+
+    if (process.env.NODE_ENV == 'production') {
+
+    plugins.push(new optimizeCSSAssetsPlugin({
+        cssProcessor: require('cssnano'),
+        cssProcessorOptions: {
+            discardComments: {
+                removeAll: true
+            }
+        }
+     }));
+}

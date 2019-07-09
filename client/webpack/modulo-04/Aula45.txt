@@ -1,0 +1,10 @@
+    Vimos como importar CSS direto da pasta node_modules, considerando-o como um módulo.
+    Mas se quisermos importar o CSS que não está na pasta node_modules, por exemplo, um arquivo que criamos.
+
+    Se colocarmos dentro de app.js
+- import 'css/meucss.css';
+
+    O webpack irá procurar o módulo dentro de node_modules.
+    No entanto, queremos acessar a pasta css. Teremos que especificar isso no caminho.
+- import '../css/meucss.css';
+

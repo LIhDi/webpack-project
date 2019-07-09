@@ -1,0 +1,54 @@
+    O bootstrap vai estar no caminho "node_modules > bootstrap > dist > css" .
+    Se você trabalha com React ou com Angular, arquivos .css são tratados como módulos,
+isto significa que um componente do Angular importa um CSS, que está atrelado a ele.
+
+    No React, podemos importar um CSS que também está atrelado a ele, dentro de um componente.
+    Esta abordagem é interessante porque podemos dizer para um componente quais são os arquivos de estilos que operam sobre ele.
+
+    Se abrirmos a pasta app-src, o arquivo módulo app.js será o primeiro a ser carregado na aplicação.
+    Nele, importaremos os arquivos CSS como se fossem módulos. Adicionaremos import usando uma sintaxe diferente.
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/css/bootstrap-theme.css';
+
+    Quando o arquivo bundle.js for gerado, ele verá que foi criado o import que está recebendo a string.
+    Como não utilizamos o ./ antes do endereço - o que indicaria a necessidade de buscar em um determinado diretório,
+como em import './booststrap/dist/css/bootstrap.css', deveriamos buscar no diretório a pasta bootstrap.
+
+    No caso, o Webpack compreenderá que a tarefa será procurar a pasta bootstrap dentro de node_modules.
+    Isso só será possível porque não especificamos outro caminho no endereço antecedido por ./. Por convenção, ele entende o que deve ser feito.
+
+
+    Temos o erro que não é possível parsear o booststrap.css, que não é um módulo, mas é tratado como tal.
+    O Webpack nos informa que para a realização da tarefa é necessário um parser, porque ele não é capaz de lidar com CSS como módulos.
+    Para que isso seja feito precisaremos do loader apropriado para lidar com o arquivo.
+
+- npm install css-loader@0.28.4 style-loader@0.18.2 --save-dev
+
+- O css-loader vai ler o arquivo CSS completamente e vai transformar todas as suas propriedades em um JSON, desta forma,
+para que outros loaders do Webpack possam extrair informações do objeto já parseado.
+
+- O style-loader vai usar essa informação do objeto transformado em JavaScript e vai torná-lo um CSS inline, que ficará no navegador,
+ou seja, os dois elementos trabalharão em conjunto.
+
+    No  webpack.config teremos dentro do test a extensão .css, não exluimos a pasta node_modules porque o bootstrap está lá.
+    Vamos configurar o loader também, no caso, trabalharemos com style-loader!css-loader.
+
+    Observe que adicionamos !, esse sinal indica que um loader será aplicado depois do outro,
+mas vale ressaltar que o processo é feito da direita para esquerda.
+    Ou seja, primeiro será aplicado do css-loader e, depois, style-loader.
+
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader'
+            }
+    Teremos que configurar um loader para cada tipo de fonte trabalhada
+- npm install url-loader@0.5.9 file-loader@0.11.2 --save-dev
+
+    Esse dois loaders trabalharão em conjunto porque o url-loader vai ver a url e extrair a fonte,
+em seguida, irá copiá-la para o local apropriado.
+    Porém, algumas fontes receberão um tratamento especial, por isso, a necessidade do file-loader.
+    Nós criaremos no webpack.config.js várias regras para lidar com diferentes tipos de fontes utilizadas.
+
+    Entre as fontes trabalhadas estão: woff, ttf, eot e svg. Algumas usarão url-loader, enquanto outras usarão file-loader,
+tratam-se de experessões regulares um tanto elabordas, mas já são bastante utilizadas.

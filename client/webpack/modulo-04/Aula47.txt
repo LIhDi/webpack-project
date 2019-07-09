@@ -1,0 +1,44 @@
+    Ao recarregarmos a página no navegador, ela será exibida sem o estilo nos instantes iniciais,
+isto ocorre devido ao fouc, (flash of unstyled content, ou seja, flash de um conteúdo não estilizado),
+vemos que o problema é que se analisarmos o arquivo bundle.js da pasta dist,
+veremos que os arquivos CSS foram adicionados automaticamente.
+    Todo arquivo CSS gerado, o Webpack agrupou em um único Bundle arquivos de css e de js, todos misturados.
+
+    No caso, por meio do JS, o CSS foi adicionado como tag <style> do navegador.
+    Se insecionarmos a página, encontraremos os arquivos CSS inline, como o style do bootstrap.css.
+    Em um único bundle.js, ele colocou todos os arquivos empacotados juntos.
+
+    O CSS será aplicado pelo JS, a menos que este adicione dinamicamente a string (que é um CSS) incluindo a tag <style> no navegador.
+    Esse processo pode demorar e, por isso, o usuário vê o flash of Unstyled Content.
+    Um especialista em Front-end poderia desistir de usar o Webpack,
+porque o navegador consegue carregar os arquivos CSS usando a tag link.
+    Existem diversas otimizações que gostaríamos de aproveitar.
+
+    Nós temos que instruir o Webpack para que ele trabalhe nesse sentido, sem adicionar o CSS do bundle.js.
+    A solução é deixar os arquivos separados, como style.css, com todos estilos concatenados.
+    Em seguida, podemos importá-lo na página e usufruir do carregamento rápido.
+
+    O próximo passo será adicionar uma tag <link> dentro do index.html e apontaremos dist/style.css
+- <link rel="stylesheet" href="dist/styles.css">
+
+    É necessário instalar o extract-text-webpack-plugi
+- npm install extract-text-webpack-plugin@3.0.0 --save-dev
+
+     No webpack.config.js
+- const extractTextPlugin = require('extract-text-webpack-plugin');
+
+                test: /\.css$/,
+                use: extractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: 'css-loader'
+                })
+    Na linha loader: 'style-loader!css-loader', substituiremos o loader por chave use.
+    Nós vamos usar o extractTextPlugin.extract(). Ele receberá um objeto JavaScript,
+em que passaremos o fallback informaremos qual loader será usado em casos de falha,
+além disso, especificaremos o loader padrão no use.
+
+    Nosso use é o resultado do extractTextPlugin, em caso de falha será usado style-loader, se tudo funcionar corretamente css-loader.
+    Em seguida, usaremos o comando npm run build-dev no Terminal, dentro da pasta dist, ele criará o styles.css.
+    Depois, como comando npm start, a aplicação funcionará corretamente.
+    Se abrirmos o código fonte da página, ele acessará dist/styles.css, arquivo criado recentemente.
+
