@@ -1,0 +1,47 @@
+    Vamos aplicar uma série de boas práticas. O Webpack, no passado,
+colocava cada módulo em uma closure e realizava um processo bem trabalhoso.
+    Porém, é possível diminuir a quantidade de closures durante a criação dos módulos,
+isso acelera o tipo de processamento e carregamento no navegador.
+
+Dentro do if de production, adicionaremos optimize.ModuleConcatenationPlugin() antes do babiliPlugin.
+
+- plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
+
+    Cada módulo do nosso bundle é envolvido por um wrapper, que resumidamente se trata de uma função.
+    Contudo, a existência desses wrappers tornam a execução do script um pouco mais lenta no navegador .
+
+    Entretanto, a partir do Webpack 3, podemos ativar o Scope Hoisting.
+    Ele consiste em concatenar o escopo de todos os módulos em um único wrapper,
+permitindo assim que nosso código seja executado mais rapidamente no navegador.
+    Com isso, as alterações serão feitas no módulo, fazendo com que seu processamento ocorra mais rapidamente.
+    Esta é uma novidade introduzida a partir da versão Webpack 3 e que estamos usando na nossa aplicação.
+    O build de produção será mais demorado dessa vez, no entanto, o bundle.js será gerado já com a otimização.
+
+    Outra boa pratica é separar do bundle.js separar as bibliotecas do sistema e o codigo que voce escreveu em outro bundle.
+    Vamos aplicar nos dois ambientes, em webpack.config.
+
+plugins.push(
+    new webpack.optimize.CommonsChunkPlugin({
+        // Vamos dar uma identificação para ele
+        name: 'vendor',
+        // E toda bibliotecas de terceiros irá ficar em
+        filename: 'vendor.bundle.js'
+}))
+
+    O CommonsChunkPlugin vai nos ajudar a fatiar a nossa aplicação, com ele, será criado um módulo que receberá o nome de vendor.
+    Nele, todas as bibliotecas criadas por terceiros e o bundle.js será um arquivo enxuto.
+    O próximo passo será configurar quem irá integrarar o vendor.bundle.js, no entry do module.exports.
+
+entry: {
+        app: './app-src/app.js',
+        // Mesmo nome do identificador do plugins equem irá fazer parte do bundle
+        vendor: ['jquery', 'bootstrap', 'reflect-metadata']
+    }
+
+Quando fizermos o build do projeto, o Webpack verá que temos dois pontos de entrada.
+No caso do app, será aproveitado todo o conteúdo do app.js, resolverá as dependências e vai gerar o bundle.js.
+No vendor, será considerado todos os módulos indicados e a gravação será feita no vendor.bundle.js.
+
+Você pode questionar o fato de que estamos importando os arquivos modal e bootstrap no app.js.
+Porém, eles não integraram o bundle.js, onde estarão os arquivos que nós programamos.
+O Webpack saberá que eles fazem parte do módulo do Bootstrap - por termos indicado isso no vendor.

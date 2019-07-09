@@ -13,6 +13,14 @@ plugins.push(
     new extractTextPlugin("styles.css"))
 
 plugins.push(
+    new webpack.optimize.CommonsChunkPlugin({
+        // Vamos dar uma identificação para ele
+        name: 'vendor',
+        // E toda bibliotecas de terceiros irá ficar em
+        filename: 'vendor.bundle.js'
+}))
+
+plugins.push(
     new webpack.ProvidePlugin({
             // O $ diz que vai estar disponivel para todos os modulos e passa o caminho e outro com o nome JQuery e passa o caminho
            '$': 'jquery/dist/jquery.js',
@@ -23,6 +31,8 @@ plugins.push(
 // Vamos minificar os arquivos apenas em prod
 if (process.env.NODE_ENV == 'production') {
 
+
+    plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
     plugins.push(new babiliPlugin());
 
     plugins.push(new optimizeCSSAssetsPlugin({
@@ -37,7 +47,11 @@ if (process.env.NODE_ENV == 'production') {
 }
 
 module.exports = {
-    entry: './app-src/app.js',
+    entry: {
+        app: './app-src/app.js',
+        // Mesmo nome do identificador do plugins
+        vendor: ['jquery', 'bootstrap', 'reflect-metadata']
+    },
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist'),
