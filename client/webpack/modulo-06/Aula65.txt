@@ -1,0 +1,63 @@
+    Quando criamos o arquivo vendor.bundle.js nós tivemos que importá-lo no index.html.
+    Outra alteração feita foi que adicionamos a tag <link> para que style.css fosse importado também.
+    Porém, queremos que os artefatos gerados pelo Webpack sejam importados automaticamente.
+    É possível fazer isso com o auxilio do plugin html-webpack-plugin.
+
+- npm install html-webpack-plugin@2.29.0 --save-dev
+
+    Em seguida, acessaremos index.html para apagar as tags <script>, com import dos dois bundle.
+
+    O arquivo index.html será usado como template gerar outro index.html, por isso,
+é recomendável alterar o nome do arquivo do primeiro para main.html. Quando o Webpack fizer o build do projeto,
+ele criará o arquivo index.html baseado no main.html,
+ele vai inserir todos os artefetos gerados por Webpack e vai gravar dentro da pasta dist.
+
+    Lembrando que agora o index.html estará dentro da pasta dist, e com essa mudança,
+o public path configurado no webpack.config.js não poderá mais conter a pasta dist.
+    Porque se estamos dentro desta pasta e importamos os bundles.js da mesma pasta, teremos um problema. Não existe a pasta dist dentro de dist.
+    A solução será remover o public path, porque os arquivos serão importado na raiz de dist.
+
+    output: {
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist'),
+        // Remover o publicPath
+        publicPath: 'dist'
+    },
+
+    Agora importamos no webpack.config
+- const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+plugins.push(new HtmlWebpackPlugin({
+    // Quando ele adicionar for adicionar o css e o script no index.html que foi criado baseado no main,
+    // ele irá colocar um hash no final para ajudar a invalidar o cash
+    hash: true,
+    // Vai minificar passando algumas configurações
+    minify: {
+        html5: true,
+        collapseWhitespace: true,
+        removeComments: true,
+    },
+    filename: 'index.html',
+    template: __dirname + '/main.html'
+}));
+
+
+    Quando ele adicionar no index.html que será criado baseado no main.html, o CSS e o script do bundle,
+incluirá hash no fim para ajudar a invalidar o cash. É desnecessário termos o nome do arquivo no hash.
+    Podemos colocar como parâmetro outro hash, que invalidará o cash.
+
+    Vamos pedir que ele minifique, ao incluirmos o minify.
+    Por enquanto, passaremos algumas instruções informando que o HTML5 é true,
+desta forma ele poderá realizar ações como a compactação de arquivos.
+    Teremos também o collapseWhitespace, que iremos configurar como true também,
+ele será responsável pela remoção de espaço entre as tags.
+    Adicionaremos ainda removeComments para que sejam removidos os comentários.
+
+    Observe que especificamos o filename e o template que ele utilizará como referência.
+    Se testarmos no Terminal, após o build, veremos que o index.html foi gerado dentro de dist,
+que teve o código compactado. Além disso, se analisarmos o arquivo, veremos que style.css foi importado,
+juntamente com o hash. Com isso, se o CSS for alterado, o hash mudará, invalidando o cash do navegador.
+
+    No fim do arquivo, vemos que ele importou o bundle.js e o vendor.bundle.js.
+    Com o comando npm start subiremos o webpack-dev-server e, no navegador,
+veremos que a aplicação está funcionando corretamente.
