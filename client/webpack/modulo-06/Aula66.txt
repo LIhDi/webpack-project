@@ -1,0 +1,53 @@
+    Existe algo que devemos considerar. Você percebeu que todos os módulos da aplicação ficarão no bundle.js,
+    Em um único arquivo, isto significa que se a aplicação tiver muitos módulos, o bundle.js vai ficar imenso.
+
+     No entanto, isto não é bom. Nós evitamos o problema de fazer múltiplas requisições para fazermos o download de vários arquivos.
+     Mas, agora, gastamos um bom tempo para baixar o bundle.js e para só então, ele ser processado pela aplicação.
+
+    Uma estratégia utilizada para a resolução de problemas como esse é o code splitting (separação de código),
+e o lazy loading (carregamento preguiçoso). Em aplicação como AngularJS ou VueJS,
+em seus sistemas de rotas, podemos informar que queremos carregar um módulo no momento em que for necessário.
+
+
+    A aplicação não será carregada com esse módulo, ele ficará em back-end separado,
+e quando acessarmos o módulo pela primeira vez, ele será carregado pelo framework uma única vez.
+
+    Desta forma, se queremos fazer um carregamento sob demanda (lazy loading),
+devemos ter a aplicação divida em partes menores. Para o escopo do projeto,
+vamos escolher esse módulo - que define a classe NegociacaoService.js - para ser a parte carregada sob demanda.
+
+    Com isso, o Webpack saberá que no momento da criação dos bundles,
+será gerado um arquivo bundle para a aplicação e outro separado destinado ao módulo carregado sob demanda.
+
+Primeiramente, levaremos em conta que não deve haver na nossa aplicação um import estático do módulo NegociacaoService.
+Sabemos que nesta aplicação, temos o index.js dentro de domain.
+
+Retiramos: export * from './negociacao/NegociacaoService.js';
+
+    E em NegociacaoController retiro o NegociacaoService do import  e o service this._service = new NegociacaoService();
+    E adicionamos onde chamava o service:
+    // O system.import irá carregar sob demanda este modulo NegociacaoService
+- const { NegociacaoService } = await System.import('../domain/negociacao/NegociacaoService');
+- const service = new NegociacaoService();
+
+    Em seguida, no método importaNegociacoes(), acessamos o service apesar de não existir mais a propriedade da classe,
+logo, teremos que criar a variável. A seguir, nós usaremos o destructuring do ECMAScript 6 para importar o NegociacaoService,
+que receberá o resultado de await System.import(). E dentro dos parênteses, passaremos o caminho do módulo.
+
+    Agora é possível realizar o carregamento "preguiçoso", com o System.import(),
+que é disponibilizado pelo Webpack.
+    Você pode se perguntar sobre a maneira como estamos fazendo lazy loading do módulo NegociacaoService.
+    Ele será carregado pela primeira vez, em seguida, será utilizado pela variável, depois,
+quando chamarmos o mesmo método, o módulo não será mais recarregado e o System.import não será feito novamente.
+
+Se fizermos o build de desenvolvimento no Terminal, o Webpack criará dois novos arquivos dentro da pasta dist:
+- bundle.js e 0.bundle.js.
+
+    Ao perceber que está sendo realizada a importação dinâmica do módulo,
+o Webpack sabe quem deverá ser isolado no novo bundle, gerando o código perfeito.
+
+    Feito isso, não precisamos nos preocupar em importar o arquino no index.html.
+    Após rodarmos o comando npm start no Terminal, veremos que a aplicação está rodando normalmente.
+    Se abrirmos o Inspect e acessarmos a aba "Network", na primeira vez que a página for carregada,
+o arquivo 0.bundle.js não será listado. Em seguida, quando clicarmos no botão "Importar Negociações",
+o arquivo já será baixado na aplicação.
