@@ -1,0 +1,35 @@
+    O System.import() é uma maneira utilizada pelo Webpack para fazer o carregamento assíncrono sob demanda de módulos.
+    Porém, o ECMAScript nas versões mais atuais, usa uma sintaxe específica para carregamento nestes casos,
+fazendo o uso da função import().
+
+    Tanto o Chrome como outros navegadores já suportam esta função, o Webpack ao detectá-la fará por debaixo dos panos,
+ele fará o System.import(), mas aceitando a sintaxe do ES que se tornará vigente.
+
+
+Substituir:
+- const { NegociacaoService } = await System.import('../domain/negociacao/NegociacaoService');
+
+Por:
+- const { NegociacaoService } = await import('../domain/negociacao/NegociacaoService');
+
+Há uma proposta para introduzir importações dinâmicas na linguagem que está bem avançada e que pode ser acompanhada em https://github.com/tc39/proposal-dynamic-import.
+
+    O Webpack 3 está preparado para trabalhar com o import(), mas se salvamos e damos o build no projeto,
+teremos um erro na compilação. Somos informados que ele tem um erro na sintaxe, no entanto,
+ele não é entendido pelo Babel - utilizado por frameworks como React.
+    Isto significa que o Babel entende como inválido o uso do import().
+
+    Temos a opção de alterar o código e usar o System.import(), ou pode utilizar o que a sintaxe mais moderna,
+que será adotada como padrão no futuro. No segundo caso, se você utilizar o Babel,
+terá que instalar o plugin babel-plugin-syntax-dynamic-import.
+
+- npm install babel-plugin-syntax-dynamic-import@6.18.0 --save-dev
+
+     E adicionar no babelrc:
+
+- "plugins" : ["babel-plugin-syntax-dynamic-import"]
+
+
+    Agora ele será processado também durante o processo de compilação. Compilaremos a aplicação novamente,
+e ao recarregarmos a aplicação,
+a aplicação conseguirá importar as negociações como o esperado.

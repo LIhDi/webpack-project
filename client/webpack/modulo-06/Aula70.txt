@@ -1,0 +1,22 @@
+    Se analisarmos o domain/NegociacaoService.js, veremos que acessamos http://localhost:3000.
+    Isso faz sentido se estamos em ambiente de desenvolvimento, porém, quando fizermos o build de produção,
+vamos querer adicionar o endereço da API em produção - que seria diferente do atual.
+
+    Veremos como é possível trocar valores da URL, adequando-os ao tipo de build.
+    Novamente, utilizaremos o plugin webpack.DefinePlugin do webpack.config.js e já vem com Webpack.
+
+    Começaremos adicionando a variável SERVICE_URL que vai receber um endereço padrão http://localhost:3000.
+    Trabalharemos com essa URL no build de desenvolvimento. Se estamos no build de produção,
+entraremos no if e teremos outro endereço - no caso, usaremos um inexistente.
+
+    Adicionaremos no webpack.config:
+plugins.push(new webpack.DefinePlugin({
+    SERVICE_URL: SERVICE_URL
+}));
+
+    O DefinePlugin() recebe como parâmetro o objeto JS e os valores que varreremos os nosso módulos e trocar.
+    Sempre que for encontrado SERVICE_URL no módulos deverá ser trocado pelo valor SERVICE_URL.
+    Vimos anteriormente que no ES, quando o nome da propriedade tem o mesmo nome da variável,
+podemos deixar apenas uma referência. Podemos deixar uma versão mais enxuta:
+
+- plugins.push(new webpack.DefinePlugin({ SERVICE_URL }));

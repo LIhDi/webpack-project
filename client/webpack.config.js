@@ -40,9 +40,12 @@ plugins.push(
     })
 )
 
+// Vai receber o nosso endereço
+let SERVICE_URL = JSON.stringify('http://localhost:3000');
 // Vamos minificar os arquivos apenas em prod
 if (process.env.NODE_ENV == 'production') {
 
+    SERVICE_URL = JSON.stringify('http://endereco-da-sua-api');
 
     plugins.push(new webpack.optimize.ModuleConcatenationPlugin());
     plugins.push(new babiliPlugin());
@@ -57,6 +60,11 @@ if (process.env.NODE_ENV == 'production') {
         canPrint: true
      }));
 }
+
+plugins.push(new webpack.DefinePlugin({
+    // Tudo que encontrar escrito SERVICE_URL recebe o valor da variavel SERVICE_URL
+    SERVICE_URL: SERVICE_URL
+}));
 
 module.exports = {
     entry: {
